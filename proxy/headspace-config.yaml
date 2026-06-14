@@ -1,0 +1,13 @@
+# Headspace proxy configuration
+proxy:
+  port: 8788
+  extensions:
+    - superinstance
+  compression:
+    gc_ledger: true
+    swarm_state: true
+    baton_context: true
+    forge_context: true
+  upstream:
+    host: "localhost"
+    port: 8080
