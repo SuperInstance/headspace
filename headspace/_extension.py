@@ -162,8 +162,19 @@ class SuperInstanceMiddleware(BaseHTTPMiddleware):
         return response
 
 
+
+
+
+def install(app, config=None):
+    """Headroom proxy extension entry point. Registers SuperInstance middleware."""
+    from starlette.middleware.base import BaseHTTPMiddleware as _BHM
+    app.add_middleware(_BHM, cls=SuperInstanceMiddleware)
+    log.info("headspace v%s middleware registered", _VERSION)
+
+
 __all__ = [
     "SuperInstanceMiddleware",
+    "install",
     "compress_for_prompt",
     "_compress_gc_ledger",
     "_compress_swarm_state",

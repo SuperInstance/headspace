@@ -23,9 +23,16 @@ def check_components() -> Dict[str, bool]:
     
     # Headroom extension
     try:
-        import importlib
+        import importlib.util
+        # First try the standard import
         spec = importlib.util.find_spec("headroom_superinstance")
-        checks["headroom_superinstance"] = spec is not None
+        if spec is not None:
+            checks["headroom_superinstance"] = True
+        else:
+            # Try the workspace location (subpackage or flat)
+            ext_subpkg = WORKSPACE / "headroom-superinstance" / "headroom_superinstance" / "__init__.py"
+            ext_flat = WORKSPACE / "headroom-superinstance" / "extension.py"
+            checks["headroom_superinstance"] = ext_subpkg.exists() or ext_flat.exists()
     except (ImportError, ModuleNotFoundError):
         checks["headroom_superinstance"] = False
     

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "headspace"
 version = "0.2.0"
-description = "Headspace - the SuperInstance context compression plane"
+description = "Headspace - the swarm-managed context compression plane for the SuperInstance fleet"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -19,8 +19,16 @@ dependencies = [
     "PyYAML>=6.0",
 ]
 
+[project.urls]
+homepage = "https://github.com/SuperInstance/headspace"
+repository = "https://github.com/SuperInstance/headspace"
+
 [project.scripts]
 headspace = "headspace.cli:main"
+
+[project.entry-points."headroom.proxy_extension"]
+superinstance = "headspace._extension:install"
+headspace = "headspace._extension:install"
 
 [tool.setuptools.packages.find]
 include = ["headspace*"]
