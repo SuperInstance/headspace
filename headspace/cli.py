@@ -94,7 +94,7 @@ proxy:
   mode: token
 
 swarm:
-  port: 8765
+  port: 18000
   auto_start: true
 
 baton:
@@ -155,7 +155,7 @@ def cmd_status():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.settimeout(2)
-        result = sock.connect_ex(('127.0.0.1', 8765))
+        result = sock.connect_ex(('127.0.0.1', 18000))
         if result == 0:
             swarm_up = True
     except Exception:
@@ -164,7 +164,7 @@ def cmd_status():
         sock.close()
     
     if swarm_up:
-        print(f"  Swarm: \033[32mrunning\033[0m (port 8765)")
+        print(f"  Swarm: \033[32mrunning\033[0m (port 18000)")
     else:
         print(f"  Swarm: \033[33mnot running\033[0m")
     
@@ -301,10 +301,10 @@ def cmd_swarm_start():
     # Check if our swarm endpoint is already up
     try:
         import urllib.request
-        with urllib.request.urlopen("http://127.0.0.1:8765/healthz", timeout=2) as r:
+        with urllib.request.urlopen("http://127.0.0.1:18000/healthz", timeout=2) as r:
             data = json.loads(r.read())
             if data.get("service") == "headspace-swarm":
-                print("  Headspace swarm already running on port 8765")
+                print("  Headspace swarm already running on port 18000")
                 return 0
     except Exception:
         pass  # not our service, or not running - proceed
@@ -337,8 +337,8 @@ def cmd_swarm_start():
         print(f"  Last log: {_ascii(tail[-200:])}")
         return 1
     
-    print(f"  \033[32mSwarm server running (PID {proc.pid}, port 8765)\033[0m")
-    print("  API: http://127.0.0.1:8765/api/v1")
+    print(f"  \033[32mSwarm server running (PID {proc.pid}, port 18000)\033[0m")
+    print("  API: http://127.0.0.1:18000/api/v1")
     return 0
 
 
@@ -348,7 +348,7 @@ def cmd_swarm_status():
     
     import urllib.request
     try:
-        resp = urllib.request.urlopen("http://127.0.0.1:8765/api/v1/status", timeout=3)
+        resp = urllib.request.urlopen("http://127.0.0.1:18000/api/v1/status", timeout=3)
         data = json.loads(resp.read())
         print(f"  Status: \033[32m{data.get('status', 'ok')}\033[0m")
         print(f"  Entries: \033[36m{data.get('ledger_entries', 0)}\033[0m")

@@ -29,7 +29,7 @@ active_profile: balanced
 
 # Swarm advisory server
 swarm:
-  url: "http://127.0.0.1:8765"
+  url: "http://127.0.0.1:18000"
   poll_interval_sec: 300
   routes:
     advise: "/api/v1/advise"
