@@ -69,8 +69,9 @@ def compress_for_prompt():
     
     # Forge context
     from headspace.forge.context import forge_snapshot
+    import json as _json
     f = forge_snapshot()
     if f:
-        parts.append(f)
+        parts.append(f"<<FORGE: {_json.dumps(f)[:200]}>>")
     
     return "\n".join(parts)
