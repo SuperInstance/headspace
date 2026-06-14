@@ -1,13 +1,52 @@
 # Headspace proxy configuration
+# v0.2.0 - swarm-managed compression with profiles
 proxy:
   port: 8788
   extensions:
     - superinstance
-  compression:
-    gc_ledger: true
-    swarm_state: true
-    baton_context: true
-    forge_context: true
-  upstream:
-    host: "localhost"
-    port: 8080
+  host: "127.0.0.1"
+
+# Compression profiles - swarm picks one based on ledger
+compression_profiles:
+  aggressive:
+    setpoint_pct: 10
+    deadband: 0.5
+    aggression_cap: 10.0
+    description: "aggressive, narrow deadband, max aggression"
+  balanced:
+    setpoint_pct: 20
+    deadband: 1.0
+    aggression_cap: 5.0
+    description: "balanced, standard deadband, moderate aggression"
+  conservative:
+    setpoint_pct: 30
+    deadband: 2.0
+    aggression_cap: 2.0
+    description: "conservative, wide deadband, gentle aggression"
+
+# Active profile (updated by swarm)
+active_profile: balanced
+
+# Swarm advisory server
+swarm:
+  url: "http://127.0.0.1:8765"
+  poll_interval_sec: 300
+  routes:
+    advise: "/api/v1/advise"
+    train: "/api/v1/train"
+    status: "/api/v1/status"
+    policy: "/api/v1/policy"
+
+# Baton fleet sync
+baton:
+  dir: "~/.openclaw/workspace/baton-system"
+  sync_interval_sec: 600
+  hot_tier: "tiers/hot"
+  warm_tier: "tiers/warm"
+  bottle_glob: "*.md"
+
+# Headroom upstream
+upstream:
+  host: "localhost"
+  port: 8080
+  timeout_sec: 30
